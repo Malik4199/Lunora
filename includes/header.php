@@ -15,7 +15,7 @@
 <body>
 
 <div class="top-bar">
-    FREE SHIPPING ON ALL ORDERS ABOVE ₦50,000
+    FREE SHIPPING ON ALL ORDERS ABOVE $5000
 </div>
 
 <header>

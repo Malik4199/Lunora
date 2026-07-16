@@ -1,72 +1,55 @@
 <?php include "includes/navbar.php"; ?>
 
-<!-- SHOP HERO -->
+<!-- Category Banner -->
 
-<section class="shop-hero">
+<section class="category-hero">
 
-    <div class="shop-hero-content">
+    <div class="category-content">
 
-        <h1>Shop</h1>
+        <span>SHOP BY CATEGORY</span>
+
+        <h1>Women's Collection</h1>
 
         <p>
-            Discover timeless fashion pieces designed to elevate your everyday style.
+            Discover elegant styles curated for every occasion.
         </p>
 
     </div>
 
 </section>
 
-<!-- SEARCH & FILTER -->
+<!-- Category Navigation -->
 
-<section class="shop-controls">
+<section class="category-nav">
 
-    <form class="search-form" action="" method="GET">
+    <a href="#" class="active">All</a>
 
-        <input
-            type="text"
-            name="search"
-            placeholder="Search for products...">
+    <a href="#">Women</a>
 
-        <button type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+    <a href="#">Men</a>
 
-    </form>
+    <a href="#">Dresses</a>
 
-    <div class="filters">
+    <a href="#">Shoes</a>
 
-        <select>
-            <option>All Categories</option>
-            <option>Women</option>
-            <option>Men</option>
-            <option>Dresses</option>
-            <option>Shoes</option>
-            <option>Bags</option>
-        </select>
+    <a href="#">Bags</a>
 
-        <select>
-            <option>Sort By</option>
-            <option>Newest</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-            <option>Best Selling</option>
-        </select>
-
-    </div>
+    <a href="#">Accessories</a>
 
 </section>
 
-<!-- PRODUCT SECTION -->
+<!-- Product Section -->
+
 <section class="shop-products">
 
     <div class="section-title">
 
-        <h2>All Products</h2>
+        <h2>Women's Collection</h2>
 
-        <span>Showing 36 Products</span>
+        <span>Showing 12 Products</span>
 
     </div>
-
+    
     <div class="product-griding">
 
         <!-- Product 1 -->

@@ -103,13 +103,11 @@
             <div class="product-info">
                 <h3>Classic Denim Jacket</h3>
                 <p>Men Fashion</p>
-                <h4>₦35,000</h4>
+                <h4>$35.55</h4>
 
                 <button>Add to Cart</button>
             </div>
         </div>
-
-
 
         <div class="product-card">
             <img src="assests/images/product2.jpg" alt="Product">
@@ -117,14 +115,11 @@
             <div class="product-info">
                 <h3>Elegant Dress</h3>
                 <p>Women Fashion</p>
-                <h4>₦45,000</h4>
+                <h4>$45.90</h4>
 
                 <button>Add to Cart</button>
             </div>
         </div>
-
-
-
 
         <div class="product-card">
             <img src="assests/images/shoes.jpg" alt="Product">
@@ -132,14 +127,11 @@
             <div class="product-info">
                 <h3>Premium Sneakers</h3>
                 <p>Shoes</p>
-                <h4>₦55,000</h4>
+                <h4>$55.99</h4>
 
                 <button>Add to Cart</button>
             </div>
         </div>
-
-
-
 
         <div class="product-card">
             <img src="assests/images/bags.jpg" alt="Product">
@@ -147,7 +139,7 @@
             <div class="product-info">
                 <h3>Luxury Handbag</h3>
                 <p>Bags</p>
-                <h4>₦60,000</h4>
+                <h4>$60.00</h4>
 
                 <button>Add to Cart</button>
             </div>
@@ -162,7 +154,7 @@
             <div class="product-info">
                 <h3>Classic Wrist Watch</h3>
                 <p>Accessories</p>
-                <h4>₦25,000</h4>
+                <h4>$25.45</h4>
 
                 <button>Add to Cart</button>
             </div>
@@ -177,7 +169,7 @@
             <div class="product-info">
                 <h3>Luxury Suit</h3>
                 <p>Men Fashion</p>
-                <h4>₦80,000</h4>
+                <h4>$80.89</h4>
 
                 <button>Add to Cart</button>
             </div>
@@ -192,7 +184,7 @@
             <div class="product-info">
                 <h3>Summer Outfit</h3>
                 <p>Women Fashion</p>
-                <h4>₦40,000</h4>
+                <h4>$40.35</h4>
 
                 <button>Add to Cart</button>
             </div>
@@ -207,7 +199,7 @@
             <div class="product-info">
                 <h3>Leather Shoes</h3>
                 <p>Shoes</p>
-                <h4>₦50,000</h4>
+                <h4>$50.75</h4>
 
                 <button>Add to Cart</button>
             </div>
