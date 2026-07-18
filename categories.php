@@ -46,7 +46,9 @@
 
         <h2>Women's Collection</h2>
 
-        <span>Showing 12 Products</span>
+        <span>
+            Showing <?php echo $products->num_rows; ?> Products
+        </span>
 
     </div>
     

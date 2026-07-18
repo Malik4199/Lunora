@@ -31,7 +31,7 @@
 
 <!-- Categories -->
 <section class="categories">
-    <div class="section-title">
+    <div class="section-titles">
         <h2>Featured Categories</h2>
         <p>Explore our latest fashion collections</p>
     </div>
@@ -88,7 +88,7 @@
 <!-- Featured Products -->
 <section class="featured-products">
 
-    <div class="section-title">
+    <div class="section-titles">
         <h2>Featured Products</h2>
         <p>Discover our latest fashion collections</p>
     </div>
@@ -213,7 +213,7 @@
 <!-- Why Choose Us -->
  <section class="why-lunora">
 
-    <div class="section-title">
+    <div class="section-titles">
         <h2>Why Choose Lunora?</h2>
         <p>
             Experience fashion shopping with quality,
@@ -317,7 +317,7 @@
 <!-- Powerful Features -->
  <section class="features">
 
-    <div class="section-title">
+    <div class="section-titles">
         <h2>Powerful Features</h2>
         <p>
             Enjoy a seamless and convenient shopping experience with Lunora.
@@ -408,7 +408,7 @@
 <!-- Customer Testimonials -->
  <section class="reviews">
 
-    <div class="section-title">
+    <div class="section-titles">
         <h2>What Our Customers Say</h2>
         <p>
             Hear from customers who love shopping with Lunora.

@@ -1,3 +1,5 @@
+<?php require "includes/auth_check.php"; ?>
+
 <?php
 include "includes/navbar.php";
 ?>
@@ -6,6 +8,12 @@ include "includes/navbar.php";
 <section class="dashboard-hero">
 
     <div class="hero-content">
+
+        <h2>
+            Welcome,
+            <?php echo $_SESSION['fullname']; ?>
+        </h2><br><br>
+
 
         <span>NEW COLLECTION</span>
 

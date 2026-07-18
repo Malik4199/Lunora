@@ -1,3 +1,38 @@
+<?php
+
+session_start();
+
+require "config/database.php";
+require "classes/Product.php";
+
+$database = new Database();
+$conn = $database->connect();
+
+$product = new Product($conn);
+
+$products = $product->getShopProducts();
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shop | Lunora</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
 <?php include "includes/navbar.php"; ?>
 
 <!-- SHOP HERO -->
@@ -63,229 +98,49 @@
 
         <h2>All Products</h2>
 
-        <span>Showing 36 Products</span>
+        <span>
+            Showing <?php echo $products->num_rows; ?> Products
+        </span>
 
     </div>
 
-    <div class="product-griding">
+<div class="product-griding">
 
-        <!-- Product 1 -->
-        <div class="product-carding">
+    <?php while($row = $products->fetch_assoc()){ ?>
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+    <div class="product-carding">
 
-            <img src="assests/images/products/blazer.png">
+    <button class="wishlist-btn">
+        <i class="fa-regular fa-heart"></i>
+    </button>
 
-            <h3>Linen Blend Blazer</h3>
+    <img src="assests/images/products/<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
 
-            <p class="pricess">$89.99</p>
+    <h3><?php echo htmlspecialchars($row['name']); ?></h3>
 
-            <div class="ratingss">
-                ★★★★★ <span>(324)</span>
-            </div>
-        </div>
+    <p class="pricess">$<?php echo number_format($row['price'], 2); ?></p>
 
-        <!-- Product 2 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/top.png">
-
-            <h3>Ribbed Knit Top</h3>
-
-            <p class="pricess">$29.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(190)</span>
-            </div>
-        </div>
-
-        <!-- Product 3 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/trousers.png">
-
-            <h3>Wide Leg Trousers</h3>
-
-            <p class="pricess">$59.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(96)</span>
-            </div>
-        </div>
-
-        <!-- Product 4 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/bag.png">
-
-            <h3>Leather Shoulder Bag</h3>
-
-            <p class="pricess">$79.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(112)</span>
-            </div>
-        </div>
-
-        <!-- Product 5 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/heels.png">
-
-            <h3>Minimal Strappy Heels</h3>
-
-            <p class="pricess">$49.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(64)</span>
-            </div>
-        </div>
-
-        <!-- Product 6 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/sunglasses.png">
-
-            <h3>Oversized Sunglasses</h3>
-
-            <p class="pricess">$19.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(53)</span>
-            </div>
-        </div>
-
-    <!-- Product 7 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product14.png">
-
-            <h3>Black Line Trousers</h3>
-
-            <p class="pricess">$69.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(256)</span>
-            </div>
-        </div>
-
-        <!-- Product 8 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product13.png">
-
-            <h3>White Bib Top</h3>
-
-            <p class="pricess">$29.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(189)</span>
-            </div>
-        </div>
-
-        <!-- Product 9 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product9.png">
-
-            <h3>Baggy Jean Trousers</h3>
-
-            <p class="pricess">$49.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(72)</span>
-            </div>
-        </div>
-
-        <!-- Product 10 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product10.png">
-
-            <h3>Black Baggy Jeans</h3>
-
-            <p class="pricess">$49.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(102)</span>
-            </div>
-        </div>
-
-        <!-- Product 11 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product11.png">
-
-            <h3>Acid Black Woodie</h3>
-
-            <p class="pricess">$39.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(32)</span>
-            </div>
-        </div>
-
-        <!-- Product 12 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product12.png">
-
-            <h3>GIGA BE Tshirt</h3>
-
-            <p class="pricess">$29.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(36)</span>
-            </div>
-        </div>
+    <div class="ratingss">
+        ★★★★★ <span>(0)</span>
     </div>
+
+    <div class="product-actions">
+        <a href="product.php?id=<?php echo $row['id']; ?>" class="view-btn">
+            View Details
+        </a>
+
+        <a href="cart.php?action=add&id=<?php echo $row['id']; ?>" class="cart-btn">
+            Add to Cart
+        </a>
+    </div>
+
+</div>
+
+<?php } ?>
+</div>
 
 </section>
 
 <?php include "includes/footer.php"; ?>
+</body>
+</html>

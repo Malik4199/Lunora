@@ -22,12 +22,12 @@
 
     <!-- Logo -->
     <div class="logo">
-        <a href="index.php">LUNORA</a>
+        <a>LUNORA</a>
     </div>
 
     <!-- Navigation -->
     <nav>
-        <a href="index.php">Home</a>
+        <a href="dashboard.php">Home</a>
         <a href="shop.php">Shop</a>
         <a href="categories.php">Categories</a>
         <a href="orders.php">Orders</a>
