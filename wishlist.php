@@ -1,4 +1,31 @@
-<?php require "includes/auth_check.php"; ?>
+<?php
+
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+require "config/database.php";
+require "classes/Wishlist.php";
+
+$database = new Database();
+$conn = $database->connect();
+
+$wishlist = new Wishlist($conn);
+
+if (isset($_GET['remove'])) {
+
+    $wishlist->remove((int) $_GET['remove']);
+
+    header("Location: wishlist.php");
+    exit();
+}
+
+$items = $wishlist->getWishlist($_SESSION['user_id']);
+
+?>
 
 <?php include "includes/navbar.php"; ?>
 
@@ -20,126 +47,48 @@
 
 <!-- WISHLIST -->
 
-<section class="wishlist-section">
+<div class="wishlist-gridss">
 
-    <div class="section-title">
+<?php while($row = $items->fetch_assoc()){ ?>
 
-        <h2>Saved Items</h2>
+<div class="wishlist-cardss">
 
-        <span>6 Items</span>
+<img
+src="assests/images/products/<?php echo htmlspecialchars($row['image']); ?>"
+alt="<?php echo htmlspecialchars($row['name']); ?>">
 
-    </div>
+<h3><?php echo htmlspecialchars($row['name']); ?></h3>
 
-    <div class="product-griding">
+<p class="price">
+$<?php echo number_format($row['price'],2); ?>
+</p>
 
-        <!-- Product 1 -->
-        <div class="product-carding">
+<div class="wishlist-actions">
 
-            <button class="remove-btn">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+<a
+href="cart.php?action=add&id=<?php echo $row['id']; ?>"
+class="cart-btnn">
 
-            <img src="assests/images/products/blazer.png">
+Add to Cart
 
-            <h3>Linen Blend Blazer</h3>
+</a>
 
-            <p class="pricess">$89.99</p>
+<a
+href="wishlist.php?remove=<?php echo $row['wishlist_id']; ?>"
+class="remove-btnn"
+onclick="return confirm('Remove this item from wishlist?')">
 
-            <div class="ratingss">
-                ★★★★★ <span>(324)</span>
-            </div>
-        </div>
+Remove
 
-        <!-- Product 2 -->
-        <div class="product-carding">
+</a>
 
-            <button class="remove-btn">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+</div>
 
-            <img src="assests/images/products/top.png">
+</div>
 
-            <h3>Ribbed Knit Top</h3>
+<?php } ?>
 
-            <p class="pricess">$29.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(190)</span>
-            </div>
-        </div>
-
-        <!-- Product 3 -->
-        <div class="product-carding">
-
-            <button class="remove-btn">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <img src="assests/images/products/trousers.png">
-
-            <h3>Wide Leg Trousers</h3>
-
-            <p class="pricess">$59.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(96)</span>
-            </div>
-        </div>
-
-        <!-- Product 4 -->
-        <div class="product-carding">
-
-            <button class="remove-btn">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <img src="assests/images/products/bag.png">
-
-            <h3>Leather Shoulder Bag</h3>
-
-            <p class="pricess">$79.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(112)</span>
-            </div>
-        </div>
-
-        <!-- Product 5 -->
-        <div class="product-carding">
-
-            <button class="remove-btn">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <img src="assests/images/products/heels.png">
-
-            <h3>Minimal Strappy Heels</h3>
-
-            <p class="pricess">$49.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(64)</span>
-            </div>
-        </div>
-
-        <!-- Product 6 -->
-        <div class="product-carding">
-
-            <button class="remove-btn">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <img src="assests/images/products/sunglasses.png">
-
-            <h3>Oversized Sunglasses</h3>
-
-            <p class="pricess">$19.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(53)</span>
-            </div>
-        </div>
-    </div>
+</div>
     
 </section>
 

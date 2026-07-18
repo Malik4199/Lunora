@@ -797,6 +797,7 @@ nav a{
     display:grid;
     grid-template-columns:2fr 1fr 1fr 1fr 1.5fr;
     gap:40px;
+    text-align: left;
 }
 
 .footer-logo{
@@ -815,12 +816,15 @@ nav a{
     color:#bbb;
     line-height:1.8;
     margin:20px 0;
+    text-align: left;
+    font-size: 14px;
 }
 
 .footer-col h3{
     margin-bottom:20px;
-    font-size:15px;
+    font-size:13px;
     letter-spacing:1px;
+    text-align: left;
 }
 
 .footer-col ul{
@@ -845,7 +849,7 @@ nav a{
 .social-icons{
     display:flex;
     gap:15px;
-    margin-left: 20px;
+    /* margin-left: 10px; */
 }
 
 .social-icons a{
@@ -880,7 +884,7 @@ nav a{
 }
 
 .newsletter button{
-    width:60px;
+    width:100px;
     border:none;
     background:#fff;
     color:#111;
@@ -2360,4 +2364,217 @@ nav a{
 
 .success-btn:hover{
     background:#333;
+}
+
+.orders-page{
+    padding:70px 8% 80px;
+    background:#fafafa;
+    min-height: 70vh;
+}
+
+.orders-page h1{
+    margin-bottom:30px;
+    font-size:38px;
+}
+
+.orders-table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+
+.orders-table th,
+.orders-table td{
+    padding:18px;
+    text-align:left;
+    border-bottom:1px solid #eee;
+}
+
+.orders-table th{
+    background:#111;
+    color:#fff;
+}
+
+.orders-table tr:hover{
+    background:#f8f8f8;
+}
+
+.orders-table a{
+    color:#111;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.status{
+    padding:6px 14px;
+    border-radius:20px;
+    color:#fff;
+    font-size:14px;
+}
+
+.status.pending{
+    background:#f39c12;
+}
+
+.status.processing{
+    background:#3498db;
+}
+
+.status.shipped{
+    background:#9b59b6;
+}
+
+.status.delivered{
+    background:#27ae60;
+}
+
+.status.cancelled{
+    background:#e74c3c;
+}
+
+.order-details{
+    padding:80px 8%;
+    background:#fafafa;
+}
+
+.order-summary{
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    margin:25px 0;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.order-total{
+    margin-top:30px;
+    background:#fff;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.order-total p{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+    font-size:18px;
+}
+
+.order-total h2{
+    display:flex;
+    justify-content:space-between;
+    color:#111;
+    border-top:1px solid #ddd;
+    padding-top:20px;
+}
+
+.order-details h1{
+    margin-bottom:25px;
+}
+
+.wishlist-gridss{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:30px;
+    margin-top:40px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.wishlist-cardss{
+    background:#fff;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.wishlist-cardss img{
+    width:100%;
+    height:250px;
+    object-fit:cover;
+    border-radius:12px;
+}
+
+.wishlist-cardss h3{
+    margin:15px 0 10px;
+}
+
+.wishlist-cardss .price{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.wishlist-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.cart-btnn,
+.remove-btnn{
+    flex:1;
+    text-align:center;
+    padding:12px;
+    border-radius:8px;
+    text-decoration:none;
+    color:#fff;
+}
+
+.cart-btnn{
+    background:#111;
+}
+
+.cart-btnn:hover{
+    background:#333;
+}
+
+.remove-btnn{
+    background:#dc3545;
+}
+
+.remove-btnn:hover{
+    background:#b02a37;
+}
+
+.edit-profile-section{
+max-width:900px;
+margin:50px auto;
+background:#fff;
+padding:35px;
+border-radius:15px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.edit-profile-form{
+display:flex;
+flex-direction:column;
+gap:18px;
+
+}
+
+.edit-profile-form input{
+padding:14px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:15px;
+}
+
+.edit-profile-form button{
+padding:15px;
+background:#111;
+color:#fff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+transition:.3s;
+}
+
+.edit-profile-form button:hover{
+background:#333;
 }

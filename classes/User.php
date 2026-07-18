@@ -140,6 +140,79 @@ public function countUsers()
 
     return $result->fetch_assoc()['total'];
 }
+
+// Get User by ID
+public function getUserById($id)
+{
+    $sql = "SELECT * FROM users WHERE id = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param("i", $id);
+
+    $stmt->execute();
+
+    return $stmt->get_result()->fetch_assoc();
+}
+
+// Update Profile
+public function updateProfile($id, $fullname, $phone, $image)
+{
+    if (!empty($image)) {
+
+        $sql = "UPDATE users
+                SET fullname = ?, phone = ?, profile_image = ?
+                WHERE id = ?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param(
+            "sssi",
+            $fullname,
+            $phone,
+            $image,
+            $id
+        );
+
+    } else {
+
+        $sql = "UPDATE users
+                SET fullname = ?, phone = ?
+                WHERE id = ?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param(
+            "ssi",
+            $fullname,
+            $phone,
+            $id
+        );
+
+    }
+
+    return $stmt->execute();
+}
+
+// Change Password
+public function changePassword($id, $newPassword)
+{
+    $password = password_hash($newPassword, PASSWORD_DEFAULT);
+
+    $sql = "UPDATE users
+            SET password = ?
+            WHERE id = ?";
+
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param(
+        "si",
+        $password,
+        $id
+    );
+
+    return $stmt->execute();
+}
 }
 
 ?>

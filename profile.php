@@ -1,4 +1,48 @@
-<?php require "includes/auth_check.php"; ?>
+<?php
+
+require "includes/auth_check.php";
+
+require "config/database.php";
+require "classes/User.php";
+
+$database = new Database();
+$conn = $database->connect();
+
+$user = new User($conn);
+
+$currentUser = $user->getUserById($_SESSION['user_id']);
+
+if(isset($_POST['update'])){
+
+    $fullname = trim($_POST['fullname']);
+    $phone = trim($_POST['phone']);
+
+    $image = "";
+
+    if(!empty($_FILES['profile_image']['name'])){
+
+        $image = time() . "_" . $_FILES['profile_image']['name'];
+
+        move_uploaded_file(
+            $_FILES['profile_image']['tmp_name'],
+            "assests/images/profiles/" . $image
+        );
+
+    }
+
+    $user->updateProfile(
+        $_SESSION['user_id'],
+        $fullname,
+        $phone,
+        $image
+    );
+
+    $_SESSION['fullname'] = $fullname;
+
+    header("Location: profile.php");
+    exit();
+}
+?>
 
 <?php include "includes/navbar.php"; ?>
 
@@ -28,13 +72,13 @@
 
     <div class="profile-card">
 
-        <img src="assests/images/profile.jpg" alt="Profile">
+        <img src="assests/images/profiles/<?php echo htmlspecialchars($currentUser['profile_image']); ?>" alt="Profile">
 
-        <h2>Duke Adatu</h2>
+        <h2><?php echo htmlspecialchars($currentUser['fullname']); ?></h2>
 
-        <p>duke@email.com</p>
+        <p><?php echo htmlspecialchars($currentUser['email']); ?></p>
 
-        <button>Edit Profile</button>
+        <button type="button" class="edit-profile-section" id="editProfileBtn">Edit Profile</button>
 
     </div>
 
@@ -48,22 +92,22 @@
 
             <div>
                 <h4>Full Name</h4>
-                <p>Duke Adatu</p>
+                <p><?php echo htmlspecialchars($currentUser['fullname']); ?></p>
             </div>
 
             <div>
                 <h4>Email</h4>
-                <p>duke@email.com</p>
+                <p><?php echo htmlspecialchars($currentUser['email']); ?></p>
             </div>
 
             <div>
                 <h4>Phone</h4>
-                <p>+234 800 000 0000</p>
+                <p><?php echo htmlspecialchars($currentUser['phone']); ?></p>
             </div>
 
             <div>
                 <h4>Address</h4>
-                <p>Osogbo, Osun State</p>
+                <p>Not Added Yet</p>
             </div>
 
         </div>
@@ -93,6 +137,34 @@
         </div>
 
     </div>
+
+</section>
+
+<section class="edit-profile-section">
+
+<h2>Edit Profile</h2>
+
+<form method="POST" enctype="multipart/form-data" class="edit-profile-form">
+
+<label>Profile Image</label>
+
+<input type="file" name="profile_image" accept="image/*">
+
+<label>Full Name</label>
+
+<input type="text" name="fullname" value="<?php echo htmlspecialchars($currentUser['fullname']); ?>" required>
+
+<label>Phone Number</label>
+
+<input type="text" name="phone" value="<?php echo htmlspecialchars($currentUser['phone']); ?>">
+
+<button type="submit" name="update">
+
+Save Changes
+
+</button>
+
+</form>
 
 </section>
 

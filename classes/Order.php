@@ -1,4 +1,5 @@
 <?php
+
 class Order
 {
     private $conn;
@@ -12,8 +13,6 @@ class Order
     public function placeOrder($user_id, $shipping_fee)
     {
         // Get User Cart Items
-   
-
         $sql = "SELECT
                     cart.*,
                     products.name,
@@ -25,38 +24,28 @@ class Order
                 WHERE cart.user_id = ?";
 
         $stmt = $this->conn->prepare($sql);
-
         $stmt->bind_param("i", $user_id);
-
         $stmt->execute();
 
         $cartItems = $stmt->get_result();
 
-
-        // STEP 3: Calculate Total
-
+        // Calculate Total
         $total = 0;
 
-        while($row = $cartItems->fetch_assoc()){
-
+        while ($row = $cartItems->fetch_assoc()) {
             $subtotal = $row['price'] * $row['quantity'];
-
             $total += $subtotal;
-
         }
 
-        // Reset result pointer
-
+        // Reset pointer
         $cartItems->data_seek(0);
 
-
-        // STEP 4: Create Order
-
+        // Create Order
         $grandTotal = $total + $shipping_fee;
 
         $sql = "INSERT INTO orders
-                (user_id,total_amount,shipping_fee,order_status)
-                VALUES(?,?,?,'Pending')";
+                (user_id, total_amount, shipping_fee, order_status)
+                VALUES (?, ?, ?, 'Pending')";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -71,23 +60,21 @@ class Order
 
         $order_id = $this->conn->insert_id;
 
-
-        // Save Order Items
-        // Deduct Stock
-        while($item = $cartItems->fetch_assoc()){
+        // Save Order Items & Deduct Stock
+        while ($item = $cartItems->fetch_assoc()) {
 
             $subtotal = $item['price'] * $item['quantity'];
 
             $sql = "INSERT INTO order_items
-            (
-                order_id,
-                product_id,
-                product_name,
-                price,
-                quantity,
-                subtotal
-            )
-            VALUES(?,?,?,?,?,?)";
+                    (
+                        order_id,
+                        product_id,
+                        product_name,
+                        price,
+                        quantity,
+                        subtotal
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?)";
 
             $stmt = $this->conn->prepare($sql);
 
@@ -103,9 +90,7 @@ class Order
 
             $stmt->execute();
 
-
             // Deduct Stock
-
             $sql = "UPDATE products
                     SET stock = stock - ?
                     WHERE id = ?";
@@ -119,29 +104,54 @@ class Order
             );
 
             $update->execute();
-
         }
 
-
-        // STEP 7: Clear Cart
-
-        $sql = "DELETE FROM cart
-                WHERE user_id=?";
+        // Clear Cart
+        $sql = "DELETE FROM cart WHERE user_id = ?";
 
         $stmt = $this->conn->prepare($sql);
 
-        $stmt->bind_param("i",$user_id);
+        $stmt->bind_param("i", $user_id);
 
         $stmt->execute();
 
-
-        // STEP 8: Return Order ID
-
         return $order_id;
-
     }
 
+    // Get User Orders
+    public function getUserOrders($user_id)
+    {
+        $sql = "SELECT *
+                FROM orders
+                WHERE user_id = ?
+                ORDER BY created_at DESC";
 
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param("i", $user_id);
+
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }
+
+    // Get Items for One Order
+    public function getOrderItems($order_id)
+    {
+        $sql = "SELECT *
+                FROM order_items
+                WHERE order_id = ?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param("i", $order_id);
+
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }
+
+    // Get All Orders (Admin)
     public function getOrders()
     {
         $sql = "SELECT
@@ -155,14 +165,14 @@ class Order
         return $this->conn->query($sql);
     }
 
-    // Update order status
+    // Update Order Status
     public function updateStatus($id, $status)
     {
         $sql = "UPDATE orders
-                SET status = ?
+                SET order_status = ?
                 WHERE id = ?";
 
-        $stmt = $this->conn->prepare($sql);
+                $stmt = $this->conn->prepare($sql);
 
         $stmt->bind_param("si", $status, $id);
 
@@ -172,25 +182,45 @@ class Order
     // Count Orders
     public function countOrders()
     {
-    $sql = "SELECT COUNT(*) AS total FROM orders";
+        $sql = "SELECT COUNT(*) AS total FROM orders";
 
-    $result = $this->conn->query($sql);
+        $result = $this->conn->query($sql);
 
-    return $result->fetch_assoc()['total'];
+        $row = $result->fetch_assoc();
+
+        return $row['total'];
     }
 
     // Total Revenue
     public function totalRevenue()
     {
-    $sql = "SELECT SUM(total_amount) AS revenue FROM orders
-            WHERE status='Delivered'";
+        $sql = "SELECT SUM(total_amount) AS revenue
+                FROM orders
+                WHERE order_status = 'Delivered'";
 
-    $result = $this->conn->query($sql);
+        $result = $this->conn->query($sql);
 
-    $row = $result->fetch_assoc();
+        $row = $result->fetch_assoc();
 
-    return $row['revenue'] ?? 0;
-}
+        return $row['revenue'] ?? 0;
+    }
+
+    // Get Single Order
+    public function getOrder($order_id, $user_id)
+    {
+        $sql = "SELECT *
+            FROM orders
+            WHERE id = ?
+            AND user_id = ?";
+
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param("ii", $order_id, $user_id);
+
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_assoc();
+    }
 }
 
 ?>

@@ -292,6 +292,10 @@ background:#333;
 }
 
 /*  USERS PAGE  */
+.h2{
+    margin-bottom: 20px;
+    text-align: center;
+}
 
 .recent-orders select{
     padding:8px 12px;

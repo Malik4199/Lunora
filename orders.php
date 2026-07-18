@@ -1,140 +1,109 @@
-<?php require "includes/auth_check.php"; ?>
+<?php
+
+session_start();
+
+if(!isset($_SESSION['user_id'])){
+    header("Location: login.php");
+    exit();
+}
+
+require "config/database.php";
+require "classes/Order.php";
+
+$database = new Database();
+$conn = $database->connect();
+
+$order = new Order($conn);
+
+$orders = $order->getUserOrders($_SESSION['user_id']);
+
+?>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>My Orders</title>
+
+<link rel="stylesheet" href="assests/css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
 
 <?php include "includes/navbar.php"; ?>
 
-<!-- ORDERS HERO -->
+<section class="orders-page">
 
-<section class="orders-hero">
+<h1>My Orders</h1>
 
-    <div class="orders-hero-content">
+<table class="orders-table">
 
-        <span>ORDER HISTORY</span>
+<thead>
 
-        <h1>My Orders</h1>
+<tr>
 
-        <p>Track your purchases and view your previous orders.</p>
+<th>Order #</th>
 
-    </div>
+<th>Date</th>
 
-</section>
+<th>Total</th>
 
-<!-- ORDERS -->
+<th>Status</th>
 
-<section class="orders-section">
+<th>Action</th>
 
-    <div class="section-title">
+</tr>
 
-        <h2>Recent Orders</h2>
+</thead>
 
-        <span>3 Orders</span>
+<tbody>
 
-    </div>
+<?php while($row = $orders->fetch_assoc()){ ?>
 
-    <div class="orders-table">
+<tr>
 
-        <table>
+<td>#LN<?php echo str_pad($row['id'],5,"0",STR_PAD_LEFT); ?></td>
 
-            <thead>
+<td><?php echo date("d M Y", strtotime($row['created_at'])); ?></td>
 
-                <tr>
+<td>$<?php echo number_format($row['total_amount'],2); ?></td>
 
-                    <th>Order ID</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th>Payment</th>
-                    <th>Delivery</th>
-                    <th>Action</th>
+<td>
 
-                </tr>
+<span class="status <?php echo strtolower($row['order_status']); ?>">
 
-            </thead>
+<?php echo $row['order_status']; ?>
 
-            <tbody>
+</span>
 
-                <tr>
+</td>
 
-                    <td>#LN1001</td>
-                    <td>16 Jul 2026</td>
-                    <td>$65.99</td>
+<td>
 
-                    <td>
-                        <span class="paid">
-                            Paid
-                        </span>
-                    </td>
+<a href="order-details.php?id=<?php echo $row['id']; ?>">
 
-                    <td>
-                        <span class="delivered">
-                            Delivered
-                        </span>
-                    </td>
+View
 
-                    <td>
-                        <a href="#" class="view-btn">
-                            View Details
-                        </a>
-                    </td>
+</a>
 
-                </tr>
+</td>
 
-                <tr>
+</tr>
 
-                    <td>#LN1002</td>
-                    <td>12 Jul 2026</td>
-                    <td>$42.99</td>
-
-                    <td>
-                        <span class="paid">
-                            Paid
-                        </span>
-                    </td>
-
-                    <td>
-                        <span class="shipping">
-                            Shipping
-                        </span>
-                    </td>
-
-                    <td>
-                        <a href="#" class="view-btn">
-                            View Details
-                        </a>
-                    </td>
-
-                </tr>
-
-                <tr>
-
-                    <td>#LN1003</td>
-                    <td>08 Jul 2026</td>
-                    <td>$28.99</td>
-
-                    <td>
-                        <span class="pending">
-                            Pending
-                        </span>
-                    </td>
-
-                    <td>
-                        <span class="processing">
-                            Processing
-                        </span>
-                    </td>
-
-                    <td>
-                        <a href="#" class="view-btn">
-                            View Details
-                        </a>
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
+<?php } ?>
+</tboby>
+</table>
 
 </section>
+
 
 <?php include "includes/footer.php"; ?>
+
+</body>
+</html>

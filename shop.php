@@ -110,9 +110,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
     <div class="product-carding">
 
-    <button class="wishlist-btn">
-        <i class="fa-regular fa-heart"></i>
-    </button>
+    <a href="add-wishlist.php?id=<?php echo $row['id']; ?>" class="wishlist-btn">
+    <i class="fa-regular fa-heart"></i>
+    </a>
 
     <img src="assests/images/products/<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
 
