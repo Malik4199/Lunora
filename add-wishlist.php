@@ -22,7 +22,7 @@ if (isset($_GET['id'])) {
     $wishlist->add($_SESSION['user_id'], $product_id);
 }
 
-header("Location: wishlist.php");
+header("Location:" . $_SERVER['HTTP_REFERER']);
 exit();
 
 ?>

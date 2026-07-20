@@ -118,7 +118,7 @@ Add to Cart
 
 <a
 href="wishlist.php?action=add&id=<?php echo $productData['id']; ?>"
-class="wishlist-btn2">
+class="wishlist-btn">
 
 <i class="fa-regular fa-heart"></i>
 

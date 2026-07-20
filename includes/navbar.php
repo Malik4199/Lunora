@@ -1,3 +1,30 @@
+<?php
+
+if(session_status() === PHP_SESSION_NONE){
+    session_start();
+}
+
+require_once "config/database.php";
+require_once "classes/Cart.php";
+require_once "classes/Wishlist.php";
+
+$database = new Database();
+$conn = $database->connect();
+
+$cart = new Cart($conn);
+$wishlist = new Wishlist($conn);
+
+$cartCount = 0;
+$wishlistCount = 0;
+
+if(isset($_SESSION['user_id'])){
+
+    $cartCount = $cart->countCart($_SESSION['user_id']);
+
+    $wishlistCount = $wishlist->countWishlist($_SESSION['user_id']);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,9 +81,10 @@
         </form>
 
         <!-- Wishlist -->
-        <a href="wishlist.php" class="icon">
+        <a href="wishlist.php" class="icon wishlist-icon">
 
             <i class="fa-regular fa-heart"></i>
+            <span><?php echo $wishlistCount; ?></span>
 
         </a>
 
@@ -87,7 +115,7 @@
 
             <i class="fa-solid fa-bag-shopping"></i>
 
-            <span>0</span>
+            <span><?php echo $cartCount; ?></span>
 
         </a>
 

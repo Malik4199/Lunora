@@ -44,7 +44,27 @@ if(isset($_POST['update'])){
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shop | Lunora</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
 <?php include "includes/navbar.php"; ?>
+
 
 <!-- PROFILE HERO -->
 
@@ -78,7 +98,7 @@ if(isset($_POST['update'])){
 
         <p><?php echo htmlspecialchars($currentUser['email']); ?></p>
 
-        <button type="button" class="edit-profile-section" id="editProfileBtn">Edit Profile</button>
+        <button type="button" id="editProfileBtn">Edit Profile</button>
 
     </div>
 
@@ -140,7 +160,7 @@ if(isset($_POST['update'])){
 
 </section>
 
-<section class="edit-profile-section">
+<section class="edit-profile-section" id="editProfileSection">
 
 <h2>Edit Profile</h2>
 
@@ -169,3 +189,20 @@ Save Changes
 </section>
 
 <?php include "includes/footer.php"; ?>
+
+<script>
+const btn = document.getElementById("editProfileBtn");
+const form = document.getElementById("editProfileSection");
+
+btn.addEventListener("click", function () {
+    if (form.style.display === "block") {
+        form.style.display = "none";
+    } else {
+        form.style.display = "block";
+    }
+});
+</script>
+
+</body>
+
+</html>

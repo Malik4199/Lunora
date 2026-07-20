@@ -2,15 +2,15 @@
 
 class Cart
 {
-    private $conn;
+    private mysqli $conn;
 
-    public function __construct($db)
+    public function __construct(mysqli $db)
     {
         $this->conn = $db;
     }
 
     // Check if product already exists in cart
-    public function cartItemExists($user_id, $product_id)
+    public function cartItemExists(int $user_id, int $product_id)
     {
         $sql = "SELECT id
                 FROM cart
@@ -27,7 +27,7 @@ class Cart
     }
 
     // Add product to cart
-    public function addToCart($user_id, $product_id)
+    public function addToCart(int $user_id, int $product_id)
     {
         if ($this->cartItemExists($user_id, $product_id)) {
 
@@ -61,7 +61,7 @@ class Cart
     }
 
     // Get User Cart Items
-    public function getCartItems($user_id) {
+    public function getCartItems(int $user_id) {
     $sql = "SELECT 
                 cart.id AS cart_id,
                 cart.quantity,
@@ -83,7 +83,7 @@ class Cart
 }
 
 // Update Cart Quantity
-public function updateQuantity($cart_id, $quantity)
+public function updateQuantity(int $cart_id, $quantity)
 {
     $sql = "UPDATE cart SET quantity = ? WHERE id = ?";
 
@@ -95,7 +95,7 @@ public function updateQuantity($cart_id, $quantity)
 }
 
 // Remove Cart Item
-public function removeItem($cart_id)
+public function removeItem(int $cart_id)
 {
     $sql = "DELETE FROM cart WHERE id = ?";
 
@@ -106,5 +106,22 @@ public function removeItem($cart_id)
     return $stmt->execute();
 }
 
+// Count Cart Items
+public function countCart(int $user_id)
+{
+    $sql = $this->conn->prepare("
+        SELECT COUNT(*) AS total
+        FROM cart
+        WHERE user_id = ?
+    ");
+
+    $sql->bind_param("i", $user_id);
+
+    $sql->execute();
+
+    $result = $sql->get_result()->fetch_assoc();
+
+    return $result['total'];
+}
 }
 ?>

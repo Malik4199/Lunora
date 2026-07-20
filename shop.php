@@ -10,7 +10,13 @@ $conn = $database->connect();
 
 $product = new Product($conn);
 
-$products = $product->getShopProducts();
+$categories = $product->getCategories();
+
+$search = $_GET['search'] ?? "";
+$category = $_GET['category'] ?? "";
+$sort = $_GET['sort'] ?? "";
+
+$products = $product->searchProducts($search, $category, $sort);
 
 ?>
 
@@ -24,7 +30,7 @@ $products = $product->getShopProducts();
 
 <title>Shop | Lunora</title>
 
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assests/css/style.css">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -55,92 +61,168 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <section class="shop-controls">
 
-    <form class="search-form" action="" method="GET">
+<form class="search-form" method="GET">
 
-        <input
-            type="text"
-            name="search"
-            placeholder="Search for products...">
+<input
+type="text"
+name="search"
+placeholder="Search products..."
+value="<?php echo htmlspecialchars($search); ?>">
 
-        <button type="submit">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+<div class="filters">
 
-    </form>
+<select name="category">
 
-    <div class="filters">
+<option value="">All Categories</option>
 
-        <select>
-            <option>All Categories</option>
-            <option>Women</option>
-            <option>Men</option>
-            <option>Dresses</option>
-            <option>Shoes</option>
-            <option>Bags</option>
-        </select>
+<?php while($cat = $categories->fetch_assoc()){ ?>
 
-        <select>
-            <option>Sort By</option>
-            <option>Newest</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-            <option>Best Selling</option>
-        </select>
+<option
+value="<?php echo $cat['id']; ?>"
+<?php if($category == $cat['id']) echo "selected"; ?>>
 
-    </div>
+<?php echo htmlspecialchars($cat['name']); ?>
+
+</option>
+
+<?php } ?>
+
+</select>
+
+<select name="sort">
+
+<option value="">Sort By</option>
+
+<option value="newest"
+<?php if($sort=="newest") echo "selected"; ?>>
+Newest
+</option>
+
+<option value="low-high"
+<?php if($sort=="low-high") echo "selected"; ?>>
+Price: Low to High
+</option>
+
+<option value="high-low"
+<?php if($sort=="high-low") echo "selected"; ?>>
+Price: High to Low
+</option>
+
+<option value="name"
+<?php if($sort=="name") echo "selected"; ?>>
+Name (A-Z)
+</option>
+
+</select>
+
+<button type="submit">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+Search
+
+</button>
+
+</div>
+
+</form>
 
 </section>
 
 <!-- PRODUCT SECTION -->
+
 <section class="shop-products">
 
-    <div class="section-title">
+<div class="section-title">
 
-        <h2>All Products</h2>
+<h2>All Products</h2>
 
-        <span>
-            Showing <?php echo $products->num_rows; ?> Products
-        </span>
+<span>
 
-    </div>
+Showing <?php echo $products->num_rows; ?> Products
+
+</span>
+
+</div>
 
 <div class="product-griding">
 
-    <?php while($row = $products->fetch_assoc()){ ?>
+<?php if($products->num_rows > 0){ ?>
 
-    <div class="product-carding">
+<?php while($row = $products->fetch_assoc()){ ?>
 
-    <a href="add-wishlist.php?id=<?php echo $row['id']; ?>" class="wishlist-btn">
-    <i class="fa-regular fa-heart"></i>
-    </a>
+<div class="product-carding">
 
-    <img src="assests/images/products/<?php echo htmlspecialchars($row['image']); ?>" alt="<?php echo htmlspecialchars($row['name']); ?>">
+<button class="wishlist-btn">
+<a
+href="add-wishlist.php?id=<?php echo $row['id']; ?>">
 
-    <h3><?php echo htmlspecialchars($row['name']); ?></h3>
+<i class="fa-regular fa-heart"></i>
+</a>
+</button>
 
-    <p class="pricess">$<?php echo number_format($row['price'], 2); ?></p>
+<img
+src="assests/images/products/<?php echo htmlspecialchars($row['image']); ?>"
+alt="<?php echo htmlspecialchars($row['name']); ?>">
 
-    <div class="ratingss">
-        ★★★★★ <span>(0)</span>
-    </div>
+<h3>
 
-    <div class="product-actions">
-        <a href="product.php?id=<?php echo $row['id']; ?>" class="view-btn">
-            View Details
-        </a>
+<?php echo htmlspecialchars($row['name']); ?>
 
-        <a href="cart.php?action=add&id=<?php echo $row['id']; ?>" class="cart-btn">
-            Add to Cart
-        </a>
-    </div>
+</h3>
+
+<p class="pricess">
+
+$<?php echo number_format($row['price'],2); ?>
+
+</p>
+
+<div class="ratingss">
+
+★★★★★ <span>(0)</span>
+
+</div>
+
+<div class="product-actions">
+
+<a
+href="product.php?id=<?php echo $row['id']; ?>"
+class="view-btn">
+
+View Details
+
+</a>
+
+<a
+href="cart.php?action=add&id=<?php echo $row['id']; ?>"
+class="cart-btn">
+
+Add to Cart
+
+</a>
+
+</div>
 
 </div>
 
 <?php } ?>
+
+<?php } else { ?>
+
+<p class="no-products">
+
+No products found.
+
+</p>
+
+<?php } ?>
+
 </div>
 
 </section>
 
 <?php include "includes/footer.php"; ?>
+
 </body>
+
 </html>

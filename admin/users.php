@@ -60,10 +60,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <body>
 
-<h1 class="h2">Manage Users</h1>
-<br><br>
-
-<div class="recent-orders">
+<div class="recent-orderss">
 
 <table>
 

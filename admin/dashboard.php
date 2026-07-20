@@ -25,6 +25,7 @@ $totalCategories = $category->countCategories();
 $totalUsers = $user->countUsers();
 $totalOrders = $order->countOrders();
 $totalRevenue = $order->totalRevenue();
+$recentOrders = $order->getRecentOrders();
 ?>
 
 <!DOCTYPE html>
@@ -85,6 +86,26 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         <h2>$<?php echo number_format($totalRevenue, 2); ?></h2>
     </div>
 
+
+</div>
+
+<div class="dashboard-actions">
+
+<a href="add-product.php" class="action-btn">
+<i class="fa-solid fa-plus"></i>
+Add Product
+</a>
+
+<a href="categories.php" class="action-btn">
+<i class="fa-solid fa-layer-group"></i>
+Categories
+</a>
+
+<a href="orders.php" class="action-btn">
+<i class="fa-solid fa-box"></i>
+Manage Orders
+</a>
+
 </div>
 
 <!-- Recent Orders -->
@@ -110,41 +131,22 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
         <tbody>
 
-            <tr>
-
-                <td>#LN1001</td>
-                <td>John Doe</td>
-                <td>$45.99</td>
-                <td><span class="status delivered">Delivered</span></td>
-
-            </tr>
-
-            <tr>
-
-                <td>#LN1002</td>
-                <td>Mary James</td>
-                <td>$22.99</td>
-                <td><span class="status pending">Pending</span></td>
-
-            </tr>
-
-            <tr>
-
-                <td>#LN1003</td>
-                <td>David Paul</td>
-                <td>$78.99</td>
-                <td><span class="status shipping">Shipping</span></td>
-
-            </tr>
-
-        </tbody>
-
-    </table>
-
+            <tbody>
+                <?php while($row = $recentOrders->fetch_assoc()){ ?>
+                <tr>
+                    <td>#LN<?php echo str_pad($row['id'],5,"0",STR_PAD_LEFT); ?></td>
+                    <td><?php echo htmlspecialchars($row['fullname']); ?></td>
+                    <td>$<?php echo number_format($row['total_amount'],2); ?></td>
+                    <td>
+                        <span class="status <?php echo strtolower($row['order_status']); ?>"></span>
+                        <?php echo $row['order_status']; ?></span>
+                    </td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
 </div>
-
-</div>
-
 </body>
 
 </html>

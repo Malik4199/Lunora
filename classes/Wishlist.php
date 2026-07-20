@@ -2,15 +2,15 @@
 
 class Wishlist
 {
-    private $conn;
+    private mysqli $conn;
 
-    public function __construct($db)
+    public function __construct(mysqli $db)
     {
         $this->conn = $db;
     }
 
     // Add to wishlist
-    public function add($user_id, $product_id)
+    public function add(int $user_id, int $product_id)
     {
         $check = $this->conn->prepare("
             SELECT id
@@ -36,11 +36,12 @@ class Wishlist
     }
 
     // Get user's wishlist
-    public function getWishlist($user_id)
+    public function getWishlist(int $user_id)
     {
         $sql = $this->conn->prepare("
             SELECT
                 wishlist.id AS wishlist_id,
+                wishlist.product_id,
                 products.*
             FROM wishlist
             JOIN products
@@ -56,7 +57,7 @@ class Wishlist
     }
 
     // Remove item
-    public function remove($id)
+    public function remove(int $id)
     {
         $sql = $this->conn->prepare("
             DELETE FROM wishlist
@@ -69,7 +70,7 @@ class Wishlist
     }
 
     // Count wishlist items
-    public function countWishlist($user_id)
+    public function countWishlist(int $user_id): int
     {
         $sql = $this->conn->prepare("
             SELECT COUNT(*) AS total
@@ -82,7 +83,7 @@ class Wishlist
 
         $result = $sql->get_result()->fetch_assoc();
 
-        return $result['total'];
+        return (int) $result['total'];
     }
 }
 ?>

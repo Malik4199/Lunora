@@ -2,9 +2,9 @@
 
 class Product
 {
-    private $conn;
+    private mysqli $conn;
 
-    public function __construct($db)
+    public function __construct(mysqli $db)
     {
         $this->conn = $db;
     }
@@ -17,7 +17,7 @@ class Product
     }
 
     // Add Product
-    public function addProduct($category_id, $name, $description, $price, $stock, $image)
+    public function addProduct(int $category_id, string $name, string $description, float $price, int $stock, string $image)
     {
         $sql = "INSERT INTO products
                 (category_id, name, description, price, stock, image)
@@ -53,7 +53,7 @@ class Product
     }
 
     // Get one product
-    public function getProduct($id)
+    public function getProduct(int $id)
     {
         $sql = "SELECT * FROM products WHERE id = ?";
 
@@ -65,7 +65,7 @@ class Product
     }
 
     // Delete product
-    public function deleteProduct($id)
+    public function deleteProduct(int $id)
     {
         $sql = "DELETE FROM products WHERE id = ?";
 
@@ -76,9 +76,9 @@ class Product
     }
 
     // Update product
-    public function updateProduct($id, $category_id, $name, $description, $price, $stock, $image)
-{
-    $sql = "UPDATE products
+    public function updateProduct(int $id, int $category_id, string $name, string $description, float $price, int $stock, string $image)
+    {
+        $sql = "UPDATE products
             SET category_id = ?,
                 name = ?,
                 description = ?,
@@ -87,36 +87,36 @@ class Product
                 image = ?
             WHERE id = ?";
 
-    $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
 
-    $stmt->bind_param(
-        "issdisi",
-        $category_id,
-        $name,
-        $description,
-        $price,
-        $stock,
-        $image,
-        $id
-    );
+        $stmt->bind_param(
+            "issdisi",
+            $category_id,
+            $name,
+            $description,
+            $price,
+            $stock,
+            $image,
+            $id
+        );
 
-    return $stmt->execute();
-}
+        return $stmt->execute();
+    }
 
-// Count Products
-public function countProducts()
-{
-    $sql = "SELECT COUNT(*) AS total FROM products";
+    // Count Products
+    public function countProducts()
+    {
+        $sql = "SELECT COUNT(*) AS total FROM products";
 
-    $result = $this->conn->query($sql);
+        $result = $this->conn->query($sql);
 
-    return $result->fetch_assoc()['total'];
-}
+        return $result->fetch_assoc()['total'];
+    }
 
-// Get Products for Shop
-public function getShopProducts()
-{
-    $sql = "SELECT
+    // Get Products for Shop
+    public function getShopProducts()
+    {
+        $sql = "SELECT
                 products.*,
                 categories.name AS category_name
             FROM products
@@ -124,14 +124,14 @@ public function getShopProducts()
             ON products.category_id = categories.id
             ORDER BY products.id DESC";
 
-    return $this->conn->query($sql);
-}
+        return $this->conn->query($sql);
+    }
 
 
-// Get one products
-public function getSingleProduct($id)
-{
-    $sql = "SELECT
+    // Get one products
+    public function getSingleProduct(int $id)
+    {
+        $sql = "SELECT
                 products.*,
                 categories.name AS category_name
             FROM products
@@ -139,12 +139,72 @@ public function getSingleProduct($id)
             ON products.category_id = categories.id
             WHERE products.id = ?";
 
-    $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
 
-    $stmt->bind_param("i", $id);
+        $stmt->bind_param("i", $id);
 
-    $stmt->execute();
+        $stmt->execute();
 
-    return $stmt->get_result()->fetch_assoc();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    // Search categories
+    public function searchProducts($search = "", $category = "", $sort = "")
+{
+    $sql = "SELECT products.*, categories.name AS category_name
+            FROM products
+            JOIN categories
+            ON products.category_id = categories.id
+            WHERE 1";
+
+    if (!empty($search)) {
+        $search = $this->conn->real_escape_string($search);
+        $sql .= " AND products.name LIKE '%$search%'";
+    }
+
+    if (!empty($category)) {
+        $category = (int)$category;
+        $sql .= " AND products.category_id = $category";
+    }
+
+    switch($sort){
+
+        case "low-high":
+            $sql .= " ORDER BY products.price ASC";
+            break;
+
+        case "high-low":
+            $sql .= " ORDER BY products.price DESC";
+            break;
+
+        case "name":
+            $sql .= " ORDER BY products.name ASC";
+            break;
+
+        default:
+            $sql .= " ORDER BY products.id DESC";
+    }
+
+    return $this->conn->query($sql);
+}
+
+// Get Products By Category
+public function getProductsByCategory($category_id = "")
+{
+    $sql = "SELECT
+                products.*,
+                categories.name AS category_name
+            FROM products
+            JOIN categories
+            ON products.category_id = categories.id";
+
+    if (!empty($category_id)) {
+        $category_id = (int)$category_id;
+        $sql .= " WHERE products.category_id = $category_id";
+    }
+
+    $sql .= " ORDER BY products.id DESC";
+
+    return $this->conn->query($sql);
 }
 }

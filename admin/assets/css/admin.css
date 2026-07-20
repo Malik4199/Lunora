@@ -344,3 +344,99 @@ background:#333;
     margin-bottom:20px;
     color:#222;
 }
+
+.dashboard-actions{
+    display:flex;
+    gap:20px;
+    margin:30px 0;
+}
+
+.action-btn{
+    background:#111;
+    color:#fff;
+    padding:14px 22px;
+    border-radius:8px;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.action-btn:hover{
+    background:#333;
+}
+
+.headings{
+    margin-bottom: 20px;
+}
+
+.recent-orderss{
+    background:#fff;
+    margin-top:30px;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    margin-left: 100px;
+}
+
+.recent-orderss table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.recent-orderss th,
+.recent-orderss td{
+    padding:15px;
+    border-bottom:1px solid #eee;
+    text-align:left;
+}
+
+.recent-orderss th{
+    background:#f8f8f8;
+}
+
+/*  USERS PAGE  */
+.h2{
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.recent-orderss select{
+    padding:8px 12px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    outline:none;
+    margin-right:8px;
+}
+
+.recent-orderss button{
+    padding:8px 15px;
+    border:none;
+    border-radius:6px;
+    background:#111;
+    color:#fff;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.recent-orderss button:hover{
+    background:#333;
+}
+
+.recent-orderss .fa-trash{
+    color:#dc3545;
+    font-size:18px;
+    transition:.3s;
+}
+
+.recent-orderss .fa-trash:hover{
+    color:#a71d2a;
+}
+
+.recent-orderss td{
+    vertical-align:middle;
+}
+
+.recent-orderss form{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}

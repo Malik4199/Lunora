@@ -1,3 +1,45 @@
+<?php
+
+session_start();
+
+require "config/database.php";
+require "classes/Contact.php";
+
+$database = new Database();
+$conn = $database->connect();
+
+$contact = new Contact($conn);
+
+$success = "";
+
+if(isset($_POST['send'])){
+
+    $fullname = trim($_POST['fullname']);
+    $email = trim($_POST['email']);
+    $subject = trim($_POST['subject']);
+    $message = trim($_POST['message']);
+
+    if(
+        !empty($fullname) &&
+        !empty($email) &&
+        !empty($subject) &&
+        !empty($message)
+    ){
+
+        $contact->sendMessage(
+            $fullname,
+            $email,
+            $subject,
+            $message
+        );
+
+        $success = "Your message has been sent successfully.";
+
+    }
+
+}
+?>
+
 <?php include "includes/navbar.php"; ?>
 
 <!-- Contact Hero -->
@@ -26,22 +68,29 @@
 
     <div class="contact-form">
 
-        <h2>Send Us a Message</h2>
+        <h2>Send Us a Message</h2><br>
 
-        <form action="#" method="POST">
+        <form method="POST" class="contact-form">
+            <?php if(!empty($success)){ ?>
+            <div class="success-message">
+                <?php echo $success; ?>
+            </div>
+            <?php } ?>
+            
+            <label>Full Name</label>
+            <input type="text" name="fullname" required>
+            
+            <label>Email Address</label>
+            <input type="email" name="email" required>
+            
+            <label>Subject</label>
+            <input type="text" name="subject" required>
+            
+            <label>Message</label>
+            <textarea name="message" rows="6" required></textarea>
 
-            <input type="text" name="name" placeholder="Full Name" required>
-
-            <input type="email" name="email" placeholder="Email Address" required>
-
-            <input type="text" name="subject" placeholder="Subject">
-
-            <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
-
-            <button type="submit">Send Message</button>
-
+            <button type="submit" name="send">Send Message</button>
         </form>
-
     </div>
 
     <!-- Contact Info -->

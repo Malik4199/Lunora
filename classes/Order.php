@@ -2,15 +2,15 @@
 
 class Order
 {
-    private $conn;
+    private mysqli $conn;
 
-    public function __construct($db)
+    public function __construct(mysqli $db)
     {
         $this->conn = $db;
     }
 
     // Place Order
-    public function placeOrder($user_id, $shipping_fee)
+    public function placeOrder(int $user_id, int $shipping_fee)
     {
         // Get User Cart Items
         $sql = "SELECT
@@ -119,7 +119,7 @@ class Order
     }
 
     // Get User Orders
-    public function getUserOrders($user_id)
+    public function getUserOrders(int $user_id)
     {
         $sql = "SELECT *
                 FROM orders
@@ -136,7 +136,7 @@ class Order
     }
 
     // Get Items for One Order
-    public function getOrderItems($order_id)
+    public function getOrderItems(int $order_id)
     {
         $sql = "SELECT *
                 FROM order_items
@@ -166,7 +166,7 @@ class Order
     }
 
     // Update Order Status
-    public function updateStatus($id, $status)
+    public function updateStatus(int $id, string $status)
     {
         $sql = "UPDATE orders
                 SET order_status = ?
@@ -206,7 +206,7 @@ class Order
     }
 
     // Get Single Order
-    public function getOrder($order_id, $user_id)
+    public function getOrder(int $order_id, int $user_id)
     {
         $sql = "SELECT *
             FROM orders
@@ -221,6 +221,24 @@ class Order
 
         return $stmt->get_result()->fetch_assoc();
     }
+
+    public function getRecentOrders($limit = 5)
+    {
+    $sql = "SELECT
+                orders.*,
+                users.fullname
+            FROM orders
+            JOIN users
+            ON orders.user_id = users.id
+            ORDER BY orders.created_at DESC
+            LIMIT ?";
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $limit);
+    $stmt->execute();
+
+    return $stmt->get_result();
+}
 }
 
 ?>

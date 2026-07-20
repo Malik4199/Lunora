@@ -1,276 +1,274 @@
+<?php
+
+session_start();
+
+require "config/database.php";
+require "classes/Product.php";
+
+$database = new Database();
+$conn = $database->connect();
+
+$product = new Product($conn);
+
+$categories = $product->getCategories();
+
+$category_id = isset($_GET['category'])
+    ? (int)$_GET['category']
+    : "";
+
+$products = $product->getProductsByCategory($category_id);
+
+// Get category name
+$pageTitle = "All Products";
+
+if($category_id != ""){
+
+    $catQuery = $conn->prepare(
+        "SELECT name FROM categories WHERE id=?"
+    );
+
+    $catQuery->bind_param("i",$category_id);
+
+    $catQuery->execute();
+
+    $catResult = $catQuery->get_result();
+
+    if($catResult->num_rows > 0){
+
+        $pageTitle = $catResult->fetch_assoc()['name'];
+
+    }
+
+}
+
+?>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title><?php echo $pageTitle; ?> | Lunora</title>
+
+<link rel="stylesheet"
+href="assests/css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
 <?php include "includes/navbar.php"; ?>
 
-<!-- Category Banner -->
+<!-- CATEGORY HERO -->
 
 <section class="category-hero">
 
-    <div class="category-content">
+<div class="category-content">
 
-        <span>SHOP BY CATEGORY</span>
+<span>SHOP BY CATEGORY</span>
 
-        <h1>Women's Collection</h1>
+<h1><?php echo htmlspecialchars($pageTitle); ?></h1>
 
-        <p>
-            Discover elegant styles curated for every occasion.
-        </p>
+<p>
 
-    </div>
+Discover premium fashion pieces
+carefully selected for your style.
+
+</p>
+
+</div>
 
 </section>
 
-<!-- Category Navigation -->
+<!-- CATEGORY NAVIGATION -->
 
 <section class="category-nav">
 
-    <a href="#" class="active">All</a>
+<a
+href="categories.php"
+class="<?php echo ($category_id=="") ? "active" : ""; ?>">
 
-    <a href="#">Women</a>
+All
 
-    <a href="#">Men</a>
+</a>
 
-    <a href="#">Dresses</a>
+<?php
 
-    <a href="#">Shoes</a>
+$categories = $product->getCategories();
 
-    <a href="#">Bags</a>
+while($cat = $categories->fetch_assoc()){
 
-    <a href="#">Accessories</a>
+?>
+
+<a
+
+href="categories.php?category=<?php echo $cat['id']; ?>"
+
+class="<?php
+
+echo ($category_id==$cat['id']) ? "active" : "";
+
+?>">
+
+<?php echo htmlspecialchars($cat['name']); ?>
+
+</a>
+
+<?php } ?>
 
 </section>
 
-<!-- Product Section -->
+<!-- PRODUCTS -->
 
 <section class="shop-products">
 
-    <div class="section-title">
+<div class="section-title">
 
-        <h2>Women's Collection</h2>
+<h2>
 
-        <span>
-            Showing <?php echo $products->num_rows; ?> Products
-        </span>
+<?php echo htmlspecialchars($pageTitle); ?>
 
-    </div>
-    
-    <div class="product-griding">
+</h2>
 
-        <!-- Product 1 -->
-        <div class="product-carding">
+<span>
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+Showing
 
-            <img src="assests/images/products/blazer.png">
+<?php echo $products->num_rows; ?>
 
-            <h3>Linen Blend Blazer</h3>
+Products
 
-            <p class="pricess">$89.99</p>
+</span>
 
-            <div class="ratingss">
-                ★★★★★ <span>(324)</span>
-            </div>
-        </div>
+</div>
 
-        <!-- Product 2 -->
-        <div class="product-carding">
+<div class="product-griding">
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+<?php
 
-            <img src="assests/images/products/top.png">
+if($products->num_rows > 0){
 
-            <h3>Ribbed Knit Top</h3>
+while($row = $products->fetch_assoc()){
 
-            <p class="pricess">$29.99</p>
+?>
 
-            <div class="ratingss">
-                ★★★★★ <span>(190)</span>
-            </div>
-        </div>
+<div class="product-carding">
 
-        <!-- Product 3 -->
-        <div class="product-carding">
+<button class="wishlist-btn">
+<a
+href="add-wishlist.php?id=<?php echo $row['id']; ?>">
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+<i class="fa-regular fa-heart"></i>
+</a>
+</button>
 
-            <img src="assests/images/products/trousers.png">
+<img
 
-            <h3>Wide Leg Trousers</h3>
+src="assests/images/products/<?php echo htmlspecialchars($row['image']); ?>"
 
-            <p class="pricess">$59.99</p>
+alt="<?php echo htmlspecialchars($row['name']); ?>">
 
-            <div class="ratingss">
-                ★★★★★ <span>(96)</span>
-            </div>
-        </div>
+<h3>
 
-        <!-- Product 4 -->
-        <div class="product-carding">
+<?php echo htmlspecialchars($row['name']); ?>
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+</h3>
 
-            <img src="assests/images/products/bag.png">
+<p class="pricess">
 
-            <h3>Leather Shoulder Bag</h3>
+$<?php echo number_format($row['price'],2); ?>
 
-            <p class="pricess">$79.99</p>
+</p>
 
-            <div class="ratingss">
-                ★★★★★ <span>(112)</span>
-            </div>
-        </div>
+<div class="ratingss">
 
-        <!-- Product 5 -->
-        <div class="product-carding">
+★★★★★
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+<span>(0)</span>
 
-            <img src="assests/images/products/heels.png">
+</div>
 
-            <h3>Minimal Strappy Heels</h3>
+<div class="product-actions">
 
-            <p class="pricess">$49.99</p>
+<a
 
-            <div class="ratingss">
-                ★★★★★ <span>(64)</span>
-            </div>
-        </div>
+href="product.php?id=<?php echo $row['id']; ?>"
 
-        <!-- Product 6 -->
-        <div class="product-carding">
+class="view-btn">
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+View Details
 
-            <img src="assests/images/products/sunglasses.png">
+</a>
 
-            <h3>Oversized Sunglasses</h3>
+<a
 
-            <p class="pricess">$19.99</p>
+href="cart.php?action=add&id=<?php echo $row['id']; ?>"
 
-            <div class="ratingss">
-                ★★★★★ <span>(53)</span>
-            </div>
-        </div>
+class="cart-btn">
 
-    <!-- Product 7 -->
-        <div class="product-carding">
+Add to Cart
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+</a>
 
-            <img src="assests/images/products/product14.png">
+</div>
 
-            <h3>Black Line Trousers</h3>
+</div>
 
-            <p class="pricess">$69.99</p>
 
-            <div class="ratingss">
-                ★★★★★ <span>(256)</span>
-            </div>
-        </div>
+<?php
 
-        <!-- Product 8 -->
-        <div class="product-carding">
+}
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+}else{
 
-            <img src="assests/images/products/product13.png">
+?>
 
-            <h3>White Bib Top</h3>
+<!-- EMPTY CATEGORY -->
 
-            <p class="pricess">$29.99</p>
+<div class="empty-state">
 
-            <div class="ratingss">
-                ★★★★★ <span>(189)</span>
-            </div>
-        </div>
+<i class="fa-solid fa-shirt"></i>
 
-        <!-- Product 9 -->
-        <div class="product-carding">
+<h2>No Products Found</h2>
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+<p>
+There are currently no products in this category.
+</p>
 
-            <img src="assests/images/products/product9.png">
 
-            <h3>Baggy Jean Trousers</h3>
+<a href="categories.php" class="shop-btn">
 
-            <p class="pricess">$49.99</p>
+View All Products
 
-            <div class="ratingss">
-                ★★★★★ <span>(72)</span>
-            </div>
-        </div>
+</a>
 
-        <!-- Product 10 -->
-        <div class="product-carding">
 
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
+</div>
 
-            <img src="assests/images/products/product10.png">
 
-            <h3>Black Baggy Jeans</h3>
+<?php
 
-            <p class="pricess">$49.99</p>
+}
 
-            <div class="ratingss">
-                ★★★★★ <span>(102)</span>
-            </div>
-        </div>
+?>
 
-        <!-- Product 11 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product11.png">
-
-            <h3>Acid Black Woodie</h3>
-
-            <p class="pricess">$39.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(32)</span>
-            </div>
-        </div>
-
-        <!-- Product 12 -->
-        <div class="product-carding">
-
-            <button class="wishlist-btn">
-                <i class="fa-regular fa-heart"></i>
-            </button>
-
-            <img src="assests/images/products/product12.png">
-
-            <h3>GIGA BE Tshirt</h3>
-
-            <p class="pricess">$29.99</p>
-
-            <div class="ratingss">
-                ★★★★★ <span>(36)</span>
-            </div>
-        </div>
-    </div>
+</div>
 
 </section>
 
+
 <?php include "includes/footer.php"; ?>
+
+
+</body>
+
+</html>

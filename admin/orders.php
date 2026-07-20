@@ -85,9 +85,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <td><?php echo htmlspecialchars($row['fullname']); ?></td>
 
-<td>₦<?php echo number_format($row['total_amount'],2); ?></td>
+<td>$<?php echo number_format($row['total_amount'],2); ?></td>
 
-<td><?php echo htmlspecialchars($row['status']); ?></td>
+<td><?php echo htmlspecialchars($row['order_status']); ?></td>
 
 <td><?php echo $row['created_at']; ?></td>
 

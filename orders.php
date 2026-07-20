@@ -2,7 +2,7 @@
 
 session_start();
 
-if(!isset($_SESSION['user_id'])){
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
@@ -20,17 +20,19 @@ $orders = $order->getUserOrders($_SESSION['user_id']);
 ?>
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>My Orders</title>
+<title>My Orders | Lunora</title>
 
-<link rel="stylesheet" href="assests/css/style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
@@ -41,6 +43,8 @@ $orders = $order->getUserOrders($_SESSION['user_id']);
 <section class="orders-page">
 
 <h1>My Orders</h1>
+
+<?php if($orders->num_rows > 0){ ?>
 
 <table class="orders-table">
 
@@ -68,17 +72,29 @@ $orders = $order->getUserOrders($_SESSION['user_id']);
 
 <tr>
 
-<td>#LN<?php echo str_pad($row['id'],5,"0",STR_PAD_LEFT); ?></td>
+<td>
 
-<td><?php echo date("d M Y", strtotime($row['created_at'])); ?></td>
+#LN<?php echo str_pad($row['id'],5,"0",STR_PAD_LEFT); ?>
 
-<td>$<?php echo number_format($row['total_amount'],2); ?></td>
+</td>
+
+<td>
+
+<?php echo date("d M Y", strtotime($row['created_at'])); ?>
+
+</td>
+
+<td>
+
+$<?php echo number_format($row['total_amount'],2); ?>
+
+</td>
 
 <td>
 
 <span class="status <?php echo strtolower($row['order_status']); ?>">
 
-<?php echo $row['order_status']; ?>
+<?php echo htmlspecialchars($row['order_status']); ?>
 
 </span>
 
@@ -86,9 +102,11 @@ $orders = $order->getUserOrders($_SESSION['user_id']);
 
 <td>
 
-<a href="order-details.php?id=<?php echo $row['id']; ?>">
+<a
+href="order-details.php?id=<?php echo $row['id']; ?>"
+class="view-order-btn">
 
-View
+View Details
 
 </a>
 
@@ -97,13 +115,39 @@ View
 </tr>
 
 <?php } ?>
-</tboby>
+
+</tbody>
+
 </table>
 
-</section>
+<?php } else { ?>
 
+<div class="empty-state">
+
+<i class="fa-solid fa-box-open"></i>
+
+<h2>No Orders Yet</h2><br>
+
+<p>
+
+You haven't placed any orders yet.
+
+</p><br><br>
+
+<a href="shop.php" class="shop-btn">
+
+Start Shopping
+
+</a>
+
+</div>
+
+<?php } ?>
+
+</section>
 
 <?php include "includes/footer.php"; ?>
 
 </body>
+
 </html>
