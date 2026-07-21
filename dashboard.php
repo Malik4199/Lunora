@@ -349,12 +349,28 @@ include "includes/navbar.php";
             Sign up for exclusive ofters, new arrivals, and style inspination.
         </p>
 
-        <form action="#" method="POST" class="newsletter-form">
+        <form action="newsletter.php" method="POST" class="newsletter-form">
             <input type="email" name="email" placeholder="Enter your email address" required>
-            <button type="submit">
+            <button type="submit" name="subscribe">
                 Subscribe
             </button>
         </form>
+        <?php
+            if(isset($_GET['newsletter'])){
+                if($_GET['newsletter']=="success"){
+                    echo "<p class='success'>
+                    Subscribed successfully!
+                    </p>";
+                } elseif($_GET['newsletter']=="empty"){
+                    echo "<p class='error'>
+                    Email is required.
+                </p>"; } else{
+                    echo "<p class='error'>
+                    ".$_GET['newsletter']."
+                </p>";
+            }
+        }
+        ?>
     </div>
 
 </section>

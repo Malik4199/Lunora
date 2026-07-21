@@ -69,6 +69,11 @@ name="search"
 placeholder="Search products..."
 value="<?php echo htmlspecialchars($search); ?>">
 
+<button type="submit">
+<i class="fa-solid fa-magnifying-glass"></i>
+Search
+</button>
+
 <div class="filters">
 
 <select name="category">
@@ -89,8 +94,8 @@ value="<?php echo $cat['id']; ?>"
 
 </select>
 
-<select name="sort">
 
+<select name="sort">
 <option value="">Sort By</option>
 
 <option value="newest"
@@ -114,17 +119,7 @@ Name (A-Z)
 </option>
 
 </select>
-
-<button type="submit">
-
-<i class="fa-solid fa-magnifying-glass"></i>
-
-Search
-
-</button>
-
 </div>
-
 </form>
 
 </section>
@@ -178,19 +173,17 @@ $<?php echo number_format($row['price'],2); ?>
 </p>
 
 <div class="ratingss">
-
-★★★★★ <span>(0)</span>
-
+<?php
+$rating = $row['rating'] ?? 0;
+echo str_repeat("★", floor($rating));
+echo str_repeat("☆", 5 - floor($rating));
+?>
+<span><?php echo number_format($rating,1); ?></span>
 </div>
 
 <div class="product-actions">
-
-<a
-href="product.php?id=<?php echo $row['id']; ?>"
-class="view-btn">
-
+<a href="product.php?id=<?php echo $row['id']; ?>" class="view-btn">
 View Details
-
 </a>
 
 <a

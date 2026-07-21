@@ -24,6 +24,30 @@ if (!$productData) {
     exit();
 }
 
+require "classes/Review.php";
+
+$review = new Review($conn);
+
+if(isset($_POST['submit_review'])){
+
+    $rating = (int)$_POST['rating'];
+
+    $text = trim($_POST['review']);
+
+    $review->addReview(
+        $_SESSION['user_id'],
+        $id,
+        $rating,
+        $text
+    );
+
+    header("Location: product.php?id=".$id);
+
+    exit();
+}
+
+$reviews = $review->getReviews($id);
+
 ?>
 
 <!DOCTYPE html>
@@ -76,6 +100,19 @@ $<?php echo number_format($productData['price'],2); ?>
 
 </h2>
 
+<div class="product-rating">
+<?php
+$rating = $productData['rating'] ?? 0;
+echo str_repeat("★", floor($rating));
+echo str_repeat("☆", 5 - floor($rating));
+?>
+<span>
+<?php echo number_format($rating,1); ?>/5
+</span>
+</div>
+
+<br>
+
 <p>
 
 <?php echo nl2br(htmlspecialchars($productData['description'])); ?>
@@ -116,24 +153,74 @@ Add to Cart
 
 </a>
 
-<a
-href="wishlist.php?action=add&id=<?php echo $productData['id']; ?>"
-class="wishlist-btn">
-
-<i class="fa-regular fa-heart"></i>
-
-Wishlist
-
-</a>
-
 </div>
 
 </div>
 
 </section>
 
+</div>
+
+</section>
+
+<!-- REVIEW FORM START -->
+<section class="review-form">
+
+<h2>Leave a Review</h2><br>
+<form method="POST">
+<label>Rating</label>
+
+<select name="rating" required>
+
+<option value="">Select Rating</option>
+<option value="5">★★★★★</option>
+<option value="4">★★★★☆</option>
+<option value="3">★★★☆☆</option>
+<option value="2">★★☆☆☆</option>
+<option value="1">★☆☆☆☆</option>
+
+</select>
+
+<textarea name="review" rows="5" placeholder="Write your review..." required></textarea>
+
+<button type="submit" name="submit_review">Submit Review</button>
+</form>
+
+</section>
+
+<!-- CUSTOMER REVIEWS -->
+<section class="customer-reviews">
+<h2>Customer Reviews</h2>
+<?php
+if($reviews->num_rows > 0){
+while($row = $reviews->fetch_assoc()){
+?>
+
+<div class="review-card">
+<h4><?php echo htmlspecialchars($row['fullname']); ?></h4>
+<p><?php
+echo str_repeat("★",$row['rating']);
+echo str_repeat("☆",5-$row['rating']);
+?></p>
+
+<p><?php echo nl2br(htmlspecialchars($row['review'])); ?></p>
+
+<small><?php echo date("d M Y",strtotime($row['created_at'])); ?></small>
+</div>
+<?php
+}
+
+}else{
+
+?>
+
+<p>No reviews yet. Be the first to review this product.</p>
+
+<?php } ?>
+
+</section>
+
 <?php include "includes/footer.php"; ?>
 
 </body>
-
 </html>

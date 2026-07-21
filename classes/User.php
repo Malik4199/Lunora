@@ -213,6 +213,22 @@ public function changePassword($id, $newPassword)
 
     return $stmt->execute();
 }
+
+// Latest Customers
+
+public function getLatestUsers()
+{
+
+$sql="
+SELECT fullname,email,created_at
+FROM users
+ORDER BY created_at DESC
+LIMIT 5
+";
+
+return $this->conn->query($sql);
+
+}
 }
 
 ?>

@@ -190,33 +190,21 @@ $<?php echo number_format($row['price'],2); ?>
 </p>
 
 <div class="ratingss">
-
-★★★★★
-
-<span>(0)</span>
-
+    <?php
+    $rating = $row['rating'] ?? 0;
+    echo str_repeat("★", floor($rating));
+    echo str_repeat("☆", 5 - floor($rating));
+    ?>
+    <span><?php echo number_format($rating,1); ?></span>
 </div>
 
 <div class="product-actions">
-
-<a
-
-href="product.php?id=<?php echo $row['id']; ?>"
-
-class="view-btn">
-
+<a href="product.php?id=<?php echo $row['id']; ?>" class="view-btn">
 View Details
-
 </a>
 
-<a
-
-href="cart.php?action=add&id=<?php echo $row['id']; ?>"
-
-class="cart-btn">
-
+<a href="cart.php?action=add&id=<?php echo $row['id']; ?>" class="cart-btn">
 Add to Cart
-
 </a>
 
 </div>

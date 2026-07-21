@@ -43,6 +43,20 @@
         </li>
 
         <li>
+            <a href="messages.php">
+                <i class="fa-solid fa-envelope"></i>
+                Messages
+            </a>
+        </li>
+
+        <li>
+            <a href="newsletter.php">
+                <i class="fa-solid fa-envelope"></i>
+                Newsletter
+            </a>
+        </li>
+
+        <li>
             <a href="settings.php">
                 <i class="fa-solid fa-gear"></i>
                 Settings

@@ -239,6 +239,85 @@ class Order
 
     return $stmt->get_result();
 }
+
+// Monthly Sales Chart
+public function getMonthlySales()
+{
+    $sql = "
+    SELECT 
+    MONTH(created_at) AS month,
+    SUM(total_amount) AS total
+    FROM orders
+    GROUP BY MONTH(created_at)
+    ORDER BY month ASC
+    ";
+
+    return $this->conn->query($sql);
+}
+
+
+// Order Status Chart
+
+public function getOrderStatus()
+{
+    $sql="
+    SELECT order_status, COUNT(*) AS total
+    FROM orders
+    GROUP BY order_status
+    ";
+
+    return $this->conn->query($sql);
+}
+
+
+// Top Selling Products
+
+public function getTopSellingProducts()
+{
+    $sql="
+    SELECT 
+    product_name,
+    SUM(quantity) AS sold
+    FROM order_items
+    GROUP BY product_name
+    ORDER BY sold DESC
+    LIMIT 5
+    ";
+
+    return $this->conn->query($sql);
+}
+
+// Monthly Sales Chart Data
+public function monthlySales()
+{
+    $sql = "
+    SELECT 
+        MONTH(created_at) AS month,
+        SUM(total_amount) AS total
+    FROM orders
+    WHERE order_status = 'Delivered'
+    GROUP BY MONTH(created_at)
+    ORDER BY MONTH(created_at)
+    ";
+
+    return $this->conn->query($sql);
+}
+
+
+
+// Order Status Chart Data
+public function orderStatusCount()
+{
+    $sql = "
+    SELECT 
+        order_status,
+        COUNT(*) AS total
+    FROM orders
+    GROUP BY order_status
+    ";
+
+    return $this->conn->query($sql);
+}
 }
 
 ?>

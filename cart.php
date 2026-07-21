@@ -28,7 +28,7 @@ if (
         (int)$_GET['id']
     );
 
-    header("Location: cart.php");
+    header("Location: shop.php");
     exit();
 }
 

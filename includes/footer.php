@@ -15,10 +15,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             </p>
 
             <div class="social-icons">
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.instagram.com/olayide_exp?igsh=NjlmcnAza3c4ZHZ0" target="parent"><i class="fa-brands fa-instagram"></i></a>
                 <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#"><i class="fa-brands fa-pinterest-p"></i></a>
-                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://pin.it/3ILVs17Ea" target="parent"><i class="fa-brands fa-pinterest-p"></i></a>
+                <a href="https://www.tiktok.com/@o0o0o0o0b0?_r=1&_t=ZS-98CYtpL4TKv" target="parent"><i class="fa-brands fa-tiktok"></i></a>
             </div>
 
         </div>
@@ -30,10 +30,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
             <ul>
                 <li><a href="shop.php">All Products</a></li>
-                <li><a href="#">New Arrivals</a></li>
-                <li><a href="#">Women</a></li>
-                <li><a href="#">Men</a></li>
-                <li><a href="#">Sale</a></li>
+                <li><a href="shop.php">New Arrivals</a></li>
+                <li><a href="shop.php">Women</a></li>
+                <li><a href="shop.php">Men</a></li>
+                <li><a href="shop.php">Sale</a></li>
             </ul>
 
         </div>
@@ -44,11 +44,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             <h3>CUSTOMER CARE</h3>
 
             <ul>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Shipping & Delivery</a></li>
-                <li><a href="#">Returns & Exchanges</a></li>
-                <li><a href="#">Size Guide</a></li>
-                <li><a href="#">FAQs</a></li>
+                <li><a href="contact.php">Contact Us</a></li>
+                <li><a href="orders.php">Shipping & Delivery</a></li>
+                <li><a href="contact.php">Returns & Exchanges</a></li>
+                <li><a href="product.php">Size Guide</a></li>
+                <li><a href="contact.php">FAQs</a></li>
             </ul>
 
         </div>
@@ -59,11 +59,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             <h3>ABOUT US</h3>
 
             <ul>
-                <li><a href="#">Our Story</a></li>
-                <li><a href="#">Sustainability</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">Press</a></li>
-                <li><a href="#">Store Locator</a></li>
+                <li><a href="dashboard.php">Our Story</a></li>
+                <li><a href="dashboard.php">Sustainability</a></li>
+                <li><a href="dashboard.php">Careers</a></li>
+                <li><a href="dashboard.php">Press</a></li>
+                <li><a href="contact.php">Store Locator</a></li>
             </ul>
 
         </div>
@@ -78,23 +78,37 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                 10% off your first order.
             </p>
 
-            <form class="newsletter">
+            <form action="newsletter.php"  class="newsletter" method="POST">
 
                 <input
-                    type="email"
+                    type="email" name="email"
                     placeholder="Enter your email"
                 >
 
-                <button type="submit">
+                <button type="submit" name="subscribe">
                     →
                 </button>
 
             </form>
 
+            <?php
+            if(isset($_GET['newsletter'])){
+                if($_GET['newsletter']=="success"){
+                    echo "<p class='success'>
+                    Subscribed successfully!
+                    </p>";
+                    } elseif($_GET['newsletter']=="empty"){
+                        echo "<p class='error'>
+                        Email is required.
+                        </p>"; } else{
+                            echo "<p class='error'>
+                            ".$_GET['newsletter']."
+                        </p>";
+                }
+            }
+            ?>
         </div>
-
     </div>
-
 </footer>
 
 </footer>

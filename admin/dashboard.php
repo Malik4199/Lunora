@@ -11,6 +11,8 @@ require "../classes/Product.php";
 require "../classes/Category.php";
 require "../classes/User.php";
 require "../classes/Order.php";
+require "../classes/Contact.php";
+require "../classes/Newsletter.php";
 
 $database = new Database();
 $conn = $database->connect();
@@ -19,6 +21,8 @@ $product = new Product($conn);
 $category = new Category($conn);
 $user = new User($conn);
 $order = new Order($conn);
+$contact = new Contact($conn);
+$newsletter = new Newsletter($conn);
 
 $totalProducts = $product->countProducts();
 $totalCategories = $category->countCategories();
@@ -26,6 +30,33 @@ $totalUsers = $user->countUsers();
 $totalOrders = $order->countOrders();
 $totalRevenue = $order->totalRevenue();
 $recentOrders = $order->getRecentOrders();
+
+// Chart Data
+$salesData = $order->monthlySales();
+$statusData = $order->orderStatusCount();
+
+$months = [];
+$sales = [];
+while($row = $salesData->fetch_assoc()){
+    $months[] = date("M", mktime(0,0,0,$row['month'],1));
+    $sales[] = $row['total'];
+}
+
+$statusLabels = [];
+$statusTotals = [];
+while($row = $statusData->fetch_assoc()){
+    $statusLabels[] = $row['order_status'];
+    $statusTotals[] = $row['total'];
+}
+
+$totalMessages = $contact->countMessages();
+$unreadMessages = $contact->countUnread();
+$salesData = $order->getMonthlySales();
+$orderStatus = $order->getOrderStatus();
+$topProducts = $order->getTopSellingProducts();
+$latestCustomers = $user->getLatestUsers();
+$messages = $contact->getMessages();
+$totalSubscribers = $newsletter->countSubscribers();
 ?>
 
 <!DOCTYPE html>
@@ -41,8 +72,9 @@ $recentOrders = $order->getRecentOrders();
 
 <link rel="stylesheet" href="assets/css/admin.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
@@ -86,8 +118,25 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         <h2>$<?php echo number_format($totalRevenue, 2); ?></h2>
     </div>
 
+    <div class="card">
+        <i class="fa-solid fa-envelope"></i>
+        <h3>Total Messages</h3>
+        <h2><?php echo $totalMessages; ?></h2>
+    </div>
+    
+    <div class="card">
+        <i class="fa-solid fa-envelope-open"></i>
+        <h3>Unread Messages</h3>
+        <h2><?php echo $unreadMessages; ?></h2>
+    </div>
 
+    <div class="card">
+        <i class="fa-solid fa-envelope"></i>
+        <h3>Subscribers</h3>
+        <h2><?php echo $totalSubscribers; ?></h2>
+    </div>
 </div>
+
 
 <div class="dashboard-actions">
 
@@ -108,8 +157,25 @@ Manage Orders
 
 </div>
 
-<!-- Recent Orders -->
 
+<!-- Sales Analytics -->
+<div class="sales-analytics">
+
+    <!-- Monthly sales -->
+    <div class="chart-box">
+        <h2>Monthly Sales</h2>
+        <canvas id="salesChart"></canvas>
+    </div>
+    
+    <!-- Order Status -->
+    <div class="chart-box">
+        <h2>Order Status</h2>
+        <canvas id="statusChart"></canvas>
+    </div>
+</div>
+
+
+<!-- Recent Orders -->
 <div class="recent-orders">
 
     <h2>Recent Orders</h2>
@@ -147,6 +213,54 @@ Manage Orders
         </table>
     </div>
 </div>
+
+
+<script>
+// Monthly Sales Chart
+const salesChart = document.getElementById('salesChart');
+
+new Chart(salesChart, {
+    type: 'line',
+    data: {
+        labels: <?php echo json_encode($months); ?>,
+        datasets:[{
+            label:"Sales",
+            data: <?php echo json_encode($sales); ?>,
+            borderWidth:2
+        }]
+    },
+
+
+    options: {
+        responsive:true,
+        maintainAspectRatio:false
+    }
+});
+
+
+
+
+
+// Order Status Chart
+const statusChart = document.getElementById('statusChart');
+
+new Chart(statusChart, {
+    type:'doughnut',
+    data: {
+        labels: <?php echo json_encode($statusLabels); ?>,
+        datasets:[{
+            data: <?php echo json_encode($statusTotals); ?>,
+            borderWidth:1
+        }]
+    },
+    
+    options:{
+        responsive:true,
+        maintainAspectRatio:false
+    }
+});
+</script>
+
 </body>
 
 </html>

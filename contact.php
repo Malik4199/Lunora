@@ -77,17 +77,13 @@ if(isset($_POST['send'])){
             </div>
             <?php } ?>
             
-            <label>Full Name</label>
-            <input type="text" name="fullname" required>
+            <input type="text" name="fullname" placeholder="Full Name" required>
             
-            <label>Email Address</label>
-            <input type="email" name="email" required>
+            <input type="email" name="email" placeholder="Email Address" required>
             
-            <label>Subject</label>
-            <input type="text" name="subject" required>
+            <input type="text" name="subject" placeholder="Subject" required>
             
-            <label>Message</label>
-            <textarea name="message" rows="6" required></textarea>
+            <textarea name="message" rows="6" required placeholder="Your Messages"></textarea>
 
             <button type="submit" name="send">Send Message</button>
         </form>
